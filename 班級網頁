@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>護理系一年級甲班 班級網頁</title>
+    <style>
+        /* 全局樣式 */
+        :root {
+            --primary-color: #00796b;
+            --secondary-color: #4ebaaa;
+            --light-bg: #e0f2f1;
+            --text-color: #333;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+        }
+
+        body {
+            background-color: #f4f7f6;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* 頁首與導覽列 */
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 左上角返回首頁 Logo 區域 */
+        .brand {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--white);
+        }
+
+        .brand-icon {
+            font-size: 1.8rem;
+            margin-right: 10px;
+        }
+
+        .brand-text {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        nav ul li a:hover {
+            color: var(--light-bg);
+        }
+
+        /* 主體內容區 */
+        container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            min-height: 80vh;
+        }
+
+        .page-section {
+            display: none; /* 預設隱藏所有分頁 */
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .page-section.active {
+            display: block; /* 僅顯示當前選取分頁 */
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        /* 首頁樣式 */
+        .hero {
+            background: linear-gradient(rgba(0,121,107,0.8), rgba(78,186,170,0.8)), url('https://via.placeholder.com/1000x400') center/cover;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+
+        .news-list {
+            list-style: none;
+        }
+
+        .news-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px dashed #ccc;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .news-date {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* 課表樣式 */
+        .timetable {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .timetable th, .timetable td {
+            border: 1px solid #ddd;
+            padding: 12px;
+        }
+
+        .timetable th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .timetable tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .course-tag {
+            background-color: var(--light-bg);
+            color: var(--primary-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        /* 活動花絮樣式 */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 180px;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .gallery-info {
+            padding: 1rem;
+        }
+
+        .gallery-info h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* 學生名單與幹部樣式 */
+        .cadre-section {
+            margin-bottom: 2rem;
+        }
+
+        .cadre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .cadre-card {
+            background: var(--light-bg);
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .cadre-title {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .student-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .student-table th, .student-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .student-table th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        /* 頁尾 */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頁首與導覽列 -->
+    <header>
+        <!-- 點擊左上角圖案或文字返回首頁 -->
+        <a class="brand" onclick="showSection('home')">
+            <span class="brand-icon">🩺</span>
+            <span class="brand-text">護理系一甲</span>
+        </a>
+        <nav>
+            <ul>
+                <li><a onclick="showSection('home')">首頁公告</a></li>
+                <li><a onclick="showSection('schedule')">班級課表</a></li>
+                <li><a onclick="showSection('gallery')">活動花絮</a></li>
+                <li><a onclick="showSection('students')">學生名單</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <container>
+        <!-- 首頁分頁 -->
+        <section id="home" class="page-section active">
+            <div class="hero">
+                <h1>歡迎來到護理系一年級甲班！</h1>
+                <p>專業、關懷、卓越 — 邁向白衣天使的第一步</p>
+            </div>
+            <h2>最新公告</h2>
+            <ul class="news-list">
+                <li>
+                    <span>[重要] 解剖學第一次小考範圍公佈（請至數位學習平台下載）</span>
+                    <span class="news-date">2026-10-05</span>
+                </li>
+                <li>
+                    <span>[活動] 護理系迎新大會活動照片已上傳至花絮區！</span>
+                    <span class="news-date">2026-09-28</span>
+                </li>
+                <li>
+                    <span>[提醒] 請同學於本週五前繳交實驗服尺寸登記表</span>
+                    <span class="news-date">2026-09-20</span>
+                </li>
+                <li>
+                    <span>[班會] 本週班會地點更換至 護理大樓 H201 教室</span>
+                    <span class="news-date">2026-09-15</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- 班級課表分頁 -->
+        <section id="schedule" class="page-section">
+            <h2>一年級上學期 班級課表</h2>
+            <table class="timetable">
+                <thead>
+                    <tr>
+                        <th>節次 / 時間</th>
+                        <th>星期一</th>
+                        <th>星期二</th>
+                        <th>星期三</th>
+                        <th>星期四</th>
+                        <th>星期五</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>第一節 (08:10-09:00)</td>
+                        <td rowspan="2"><span class="course-tag">護理學導論</span></td>
+                        <td>大一國文</td>
+                        <td rowspan="2"><span class="course-tag">解剖學</span></td>
+                        <td>大學英文</td>
+                        <td>體育 (一)</td>
+                    </tr>
+                    <tr>
+                        <td>第二節 (09:10-10:00)</td>
+                        <td>大一國文</td>
+                        <td>大學英文</td>
+                        <td>全民國防</td>
+                    </tr>
+                    <tr>
+                        <td>第三節 (10:10-11:00)</td>
+                        <td>普通心理學</td>
+                        <td rowspan="2"><span class="course-tag">解剖學實驗</span></td>
+                        <td>通識課程</td>
+                        <td rowspan="2"><span class="course-tag">基本護理學</span></td>
+                        <td>服務學習</td>
+                    </tr>
+                    <tr>
+                        <td>第四節 (11:10-12:00)</td>
+                        <td>普通心理學</td>
+                        <td>通識課程</td>
+                        <td>班會</td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" style="background-color: #eee; font-weight: bold;">午休時間</td>
+                    </tr>
+                    <tr>
+                        <td>第五節 (13:30-14:20)</td>
+                        <td>生物學</td>
+                        <td>化學概論</td>
+                        <td>自主學習</td>
+                        <td rowspan="2"><span class="course-tag">基護技術實驗</span></td>
+                        <td>資訊素養</td>
+                    </tr>
+                    <tr>
+                        <td>第六節 (14:30-15:20)</td>
+                        <td>生物學</td>
+                        <td>化學概論</td>
+                        <td>社團時間</td>
+                        <td>資訊素養</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- 活動花絮分頁 -->
+        <section id="gallery" class="page-section">
+            <h2>系上活動花絮</h2>
+            <div class="gallery-grid">
+                <div class="gallery-card">
+                    <div class="gallery-img">⛺ 新生迎新宿營相片</div>
+                    <div class="gallery-info">
+                        <h3>大一新生迎新宿營</h3>
+                        <p>透過兩天一夜的露營與團康活動，讓一甲的同學們迅速熱絡起來！</p>
+                    </div>
+                </div>
+                <div class="gallery-card">
+                    <div class="gallery-img">🩺 護理示範教室導覽</div>
+                    <div class="gallery-info">
+                        <h3>示範教室巡禮與體驗</h3>
+                        <p>第一次踏入模擬病房與基護教室，體驗護理專業技術的嚴謹。</p>
+                    </div>
+                </div>
+                <div class="gallery-card">
+                    <div class="gallery-img">🏃 系運動會進場</div>
+                    <div class="gallery-info">
+                        <h3>系運動會創意進場</h3>
+                        <p>一甲全體同學發揮創意，展現出最熱情、有活力的班級精神！</p>
+                    </div>
+                </div>
+                <div class="gallery-card">
+                    <div class="gallery-img">🕯️ 加冠典禮觀摩</div>
+                    <div class="gallery-info">
+                        <h3>學長姊加冠典禮觀摩</h3>
+                        <p>觀摩大二學長姊的傳燈與加冠儀式，感受護理傳承的精神與使命感。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 學生名單分頁 -->
+        <section id="students" class="page-section">
+            <h2>班級幹部</h2>
+            <div class="cadre-section">
+                <div class="cadre-grid">
+                    <div class="cadre-card">
+                        <div class="cadre-title">班長</div>
+                        <div>陳小明</div>
+                    </div>
+                    <div class="cadre-card">
+                        <div class="cadre-title">副班長</div>
+                        <div>林美玲</div>
+                    </div>
+                    <div class="cadre-card">
+                        <div class="cadre-title">學藝股長</div>
+                        <div>張婷婷</div>
+                    </div>
+                    <div class="cadre-card">
+                        <div class="cadre-title">康樂股長</div>
+                        <div>黃大衛</div>
+                    </div>
+                    <div class="cadre-card">
+                        <div class="cadre-title">總務股長</div>
+                        <div>許志豪</div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>學生名單 (共 40 人)</h2>
+            <table class="student-table">
+                <thead>
+                    <tr>
+                        <th>座號</th>
+                        <th>學號</th>
+                        <th>姓名</th>
+                        <th>職務</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>01</td><td>N113001</td><td>陳小明</td><td>班長</td></tr>
+                    <tr><td>02</td><td>N113002</td><td>林美玲</td><td>副班長</td></tr>
+                    <tr><td>03</td><td>N113003</td><td>張婷婷</td><td>學藝股長</td></tr>
+                    <tr><td>04</td><td>N113004</td><td>黃大衛</td><td>康樂股長</td></tr>
+                    <tr><td>05</td><td>N113005</td><td>許志豪</td><td>總務股長</td></tr>
+                    <tr><td>06</td><td>N113006</td><td>李雅婷</td><td>學生</td></tr>
+                    <tr><td>07</td><td>N113007</td><td>王家豪</td><td>學生</td></tr>
+                    <tr><td>08</td><td>N113008</td><td>吳淑芬</td><td>學生</td></tr>
+                    <tr><td>09</td><td>N113009</td><td>蔡宗翰</td><td>學生</td></tr>
+                    <tr><td>10</td><td>N113010</td><td>楊怡君</td><td>學生</td></tr>
+                    <!-- 可自行依需求增減學生資料 -->
+                </tbody>
+            </table>
+        </section>
+    </container>
+
+    <footer>
+        <p>&copy; 2026 護理系一年級甲班 版權所有 | 聯絡班長：class1a@example.edu.tw</p>
+    </footer>
+
+    <!-- JavaScript 頁面切換控制 -->
+    <script>
+        function showSection(sectionId) {
+            // 隱藏所有 section
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // 顯示目標 section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // 自動滾動回到頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
